@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)29su@a1=s2@1u@^3%jq!-me&dj00d53&z1%czij%&z_r1hkrk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -79,13 +79,42 @@ WSGI_APPLICATION = 'newproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+if DATABASE_URL:
+    DATABASES['default'] = {
+        **dj_database_url.config(default=DATABASE_URL, engine='django.db.backends.postgresql')
+    }
+# DATABASES = {
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.sqlite3',
+#     #     'NAME': BASE_DIR / 'db.sqlite3',
+#     # }
+#     # 'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv("DATABASE_URL")
+#         } 
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'djVpPnekLHnzyeAqEYqGRULripbHZtzj',
+#         'HOST': 'postgres.railway.internal',
+#         'PORT': '5432',
+#      }
+# }
 
 
 # Password validation
@@ -130,5 +159,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
