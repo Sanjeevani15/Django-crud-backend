@@ -80,19 +80,14 @@ WSGI_APPLICATION = 'newproject.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-
+DATABASE_URL = "postgresql://postgres:djVpPnekLHnzyeAqEYqGRULripbHZtzj@roundhouse.proxy.rlwy.net:46344/railway"
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL", ""))
 }
 
-if DATABASE_URL:
-    DATABASES['default'] = {
-        **dj_database_url.config(default=DATABASE_URL, engine='django.db.backends.postgresql')
-    }
+if not DATABASES['default']:
+    raise ValueError("DATABASE_URL is not set!")
+
 # DATABASES = {
 #     # 'default': {
 #     #     'ENGINE': 'django.db.backends.sqlite3',
